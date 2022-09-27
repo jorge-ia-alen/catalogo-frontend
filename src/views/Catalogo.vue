@@ -16,11 +16,11 @@
     <div class="search-area">
       <nav class="level">
         <!-- Left side -->
-        <div class="level-left">
+        <form class="level-left" @submit.prevent="searchProducts">
           <div class="level-item">
             <div class="field has-addons">
               <p class="control is-expanded">
-                <input class="input" type="text" placeholder="búsqueda de productos..." style="min-width: calc(45vw)">
+                <input class="input" type="text" placeholder="búsqueda de productos..." style="min-width: calc(45vw)" v-model='buscador'>
               </p>
               <p class="control">
                 <button class="button is-link">
@@ -30,7 +30,7 @@
               </p>
             </div>
           </div>
-        </div>
+        </form>
 
         <!-- Right side -->
         <div class="level-right">
@@ -71,7 +71,7 @@
                 <div class="content">
                   <img src="../assets/images/generic-product.png" width="150" class="image-product"
                        :alt="product.nombre"/>
-                  <p v-if="product.descripcion"><strong>Descripción: </strong> {{ product.descripcion }} </p>
+                  <p v-if="product.descrip"><strong>Descripción: </strong> {{ product.descrip }} </p>
                   <p v-if="product.estado"><strong>Estado: </strong> {{ product.estado }} </p>
                   <p v-if="product._categoria.descripcion"><strong>Categoria: </strong>
                     {{ product._categoria.descripcion }} </p>
@@ -116,7 +116,8 @@ export default {
     return {
       loading: false,
       search: {
-      },
+      }, 
+      buscador: null,
       pagination: {
         page: 1,
         pages: 1
@@ -132,8 +133,9 @@ export default {
   methods: {
     async searchProducts(page) {
       this.loading = true;
+      this.search.nombre = this.buscador
       try {
-        let data = (await HTTP.post(`/search/productos`, {
+        let data = (await HTTP.post(`/search/productos`, this.search, {
           params: {
             page: page ? page : 1
           }
