@@ -60,18 +60,13 @@
                 <p class="card-header-title">
                   {{ product.nombre }}
                 </p>
-                <button class="card-header-icon" aria-label="more options" data-tooltip="Mostrar detalle">
-                  <span class="icon">
-                    <font-awesome-icon icon="eye" aria-hidden="true"/>
-                  </span>
-                </button>
               </header>
-
               <div class="card-content">
                 <div class="content">
                   <img src="../assets/images/generic-product.png" width="150" class="image-product"
                        :alt="product.nombre"/>
                   <p v-if="product.descrip"><strong>Descripción: </strong> {{ product.descrip }} </p>
+                  <p v-if="product.precio"><strong>Precio: </strong> {{ product.precio }} </p>
                   <p v-if="product.estado"><strong>Estado: </strong> {{ product.estado }} </p>
                   <p v-if="product._categoria.descripcion"><strong>Categoria: </strong>
                     {{ product._categoria.descripcion }} </p>
@@ -81,10 +76,12 @@
 
               <footer class="card-footer">
                 <a href="#" class="card-footer-item">
-                  <span class="icon"><font-awesome-icon icon="credit-card"/></span> Comprar
-                </a>
-                <a href="#" class="card-footer-item">
-                  <span class="icon"><font-awesome-icon icon="heart"/></span> Favorito
+                  <button class="button is-link" @click.prevent='edit(product)'>
+                    Editar 
+                  </button>
+                  <button class="button is-link" @click.prevent='del(product)'>
+                    Borrar
+                  </button>
                 </a>
               </footer>
 
@@ -107,6 +104,7 @@
 
 <script>
 import {HTTP} from '@/http'
+import axios from 'axios'
 import PaginationComponent from "../components/PaginationComponent";
 
 export default {
@@ -131,6 +129,24 @@ export default {
     this.getCategorias();
   },
   methods: {
+    add(){
+        this.$router.push({name: 'addProduct'})
+      },
+    edit(instance) {
+          this.$router.push({name: 'editProduct', query:{inst:instance}})
+        }, 
+    del(instance){
+      axios.delete(`http://localhost:5000/api/products/${instance.id}`)
+        .then(()=> {
+          this.searchTask();
+        }
+        )
+            .catch((error) => {
+              console.log(error);
+              this.searchTask();
+            }
+            )
+        }, 
     async searchProducts(page) {
       this.loading = true;
       this.search.nombre = this.buscador
