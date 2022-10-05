@@ -2,6 +2,13 @@
     <div>
     <div class="box ">
     <div class="field">
+    <label class="label">Nombre</label>
+    <div class="control">
+        <input class="input" type="text" v-model="newProduct.nombre" placeholder="Nombre del producto" required>
+    </div>
+    </div>
+
+    <div class="field">
     <label class="label">Descripcion</label>
     <div class="control">
         <input class="input" type="text" v-model="newProduct.descrip" placeholder="Descripcion del producto" required>
@@ -12,6 +19,27 @@
     <label class="label">Estado</label>
     <div class="control">
         <input class="input" type="text" v-model="newProduct.estado" placeholder="Estado del producto" required>
+    </div>
+    </div>
+
+    <div class="field">
+    <label class="label">Precio</label>
+    <div class="control">
+        <input class="input" type="text" v-model="newProduct.precio" placeholder="Estado del producto" required>
+    </div>
+    </div>
+
+    <div class="field">
+    <label class="label">Categoria</label>
+    <div class="control">
+        <input class="input" type="text" v-model="newProduct.categoria_id" placeholder="Categoria del producto" required>
+    </div>
+    </div>
+
+    <div class="field">
+    <label class="label">Proveedor</label>
+    <div class="control">
+        <input class="input" type="text" v-model="newProduct.proveedor_id" placeholder="Proveedor del producto" required>
     </div>
     </div>
 
@@ -36,6 +64,9 @@ export default {
             newProduct: {
                 descrip: null, 
                 estado: null,
+                precio: null,
+                proveedor_id: null, 
+                categoria_id: null,
             }
         };
     },
@@ -44,16 +75,16 @@ export default {
     },
     methods: {
         add(){
-            axios.post(`http://localhost:5000/api/product`, this.newProduct)
+            axios.post(`http://localhost:5000/api/productos`, this.newProduct)
                 .then(()=> {
-                    this.$router.push({name: "Product"});
+                    this.$router.push({name: "producto"});
                 })
                 .catch((error) => {
                     console.log(error);
             });
         },
         cancelar(){
-            this.$router.push({name: "Product"});
+            this.$router.push({name: "producto"});
         }, 
     }
 }
